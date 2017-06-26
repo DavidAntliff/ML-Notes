@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # required by fig.gca(projection='3d')
@@ -13,7 +12,6 @@ def plot_data(x, y):
     ax.plot(x, y, 'rx', markersize=10, label="Training data")
     ax.set_ylabel("Profit in $10,000s")
     ax.set_xlabel("Population of City in 10,000s")
-    #plt.show()
     return ax
 
 
@@ -28,20 +26,22 @@ def compute_cost(X, y, theta):
 
 
 def gradient_descent(X, y, theta, alpha, num_iters):
+    """Performs gradient descent to learn theta
+    theta = gradient_descent(X, y, theta, alpha, num_iters) updates theta by 
+    taking num_iters gradient steps with learning rate alpha
+    """
     J_history = np.zeros((num_iters, 1))
     m = y.shape[0]
-    for iter in range(num_iters):
+    for i in range(num_iters):
         h = np.dot(X, theta)
         error = h - y
         gradient = alpha / m * np.dot(X.T, error)
         theta = theta - gradient
-        J_history[iter] = compute_cost(X, y, theta)
-
+        J_history[i] = compute_cost(X, y, theta)
     return theta, J_history
 
 
 def main():
-    #data = pd.read_csv('data/ex1data1.txt', header=None)
     data = np.loadtxt('data/ex1data1.txt', delimiter=',')
     X = data[:, 0]
     y = data[:, 1]
@@ -53,7 +53,7 @@ def main():
 
     # add a column of ones to X
     X = np.stack((np.ones(m), X), 1)
-    # X = np.c_[np.ones(m), X]
+    # or: X = np.c_[np.ones(m), X]
     theta = np.zeros((2, 1))
 
     iterations = 1500
@@ -111,6 +111,7 @@ def main():
     ax.set_ylabel(r"$\theta_1$")
     ax.plot(theta[0], theta[1], 'rx', markersize=10, linewidth=2)
 
+    # show all plots at once
     plt.show()
 
 
