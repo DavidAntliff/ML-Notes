@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # required by fig.gca(projection='3d')
@@ -21,7 +23,7 @@ def compute_cost(X, y, theta):
     parameter for linear regression to fit the data points in X and y.
     """
     h = np.dot(X, theta)
-    J = np.sum(np.square((h - y))) / (2 * len(y))
+    J = np.sum(np.square(h - y)) / (2 * len(y))
     return J
 
 
