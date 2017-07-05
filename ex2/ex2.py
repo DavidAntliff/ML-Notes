@@ -15,11 +15,8 @@ def plot_data(X, y):
     ax = fig.add_subplot(111)
     pos = (y == 1)[:, 0]  # need to reshape to (N,)
     neg = (y == 0)[:, 0]  # need to reshape to (N,)
-    ax.plot(X[pos, 0], X[pos, 1], 'k+', linewidth=2, markersize=7, label='Admitted')
-    ax.plot(X[neg, 0], X[neg, 1], 'ko', markerfacecolor='y', markersize=7, label='Not Admitted')
-    ax.set_xlabel('Exam 1 score')
-    ax.set_ylabel('Exam 2 score')
-    ax.legend()
+    ax.plot(X[pos, 0], X[pos, 1], 'k+', linewidth=2, markersize=7)
+    ax.plot(X[neg, 0], X[neg, 1], 'ko', markerfacecolor='y', markersize=7)
     return ax
 
 
@@ -28,12 +25,10 @@ def plot_decision_boundary(theta, X, y):
     the decision boundary defined by theta
     plot_decision_boundary(theta, X,y) plots the data points with + for the 
     positive examples and o for the negative examples. X is assumed to be 
-    a either 
-    1) Mx3 matrix, where the first column is an all-ones column for the 
-       intercept.
-    2) MxN, N>3 matrix, where the first column is all-ones
+    Mx3 matrix, where the first column is an all-ones column for the
+    intercept.
     """
-    ax = plot_data(X[:,(1,2)], y)
+    ax = plot_data(X[:, (1, 2)], y)
     if X.shape[1] <= 3:
         # only need 2 points to define a line, so choose two endpoints
         plot_x = np.array([min(X[:,1]) - 2, max(X[:,1]) + 2])
@@ -41,8 +36,7 @@ def plot_decision_boundary(theta, X, y):
         # calculate the decision boundary line
         plot_y = (-1 / theta[2]) * (theta[1] * plot_x + theta[0])
 
-        ax.plot(plot_x, plot_y, label='Decision Boundary')
-        ax.legend()
+        ax.plot(plot_x, plot_y)
         ax.axis([30, 100, 30, 100])
     return ax
 
@@ -96,6 +90,9 @@ def main():
     y = np.reshape(data[:, 2], (-1, 1))
 
     ax = plot_data(X, y)
+    ax.set_xlabel('Exam 1 score')
+    ax.set_ylabel('Exam 2 score')
+    ax.legend(labels=["Admitted", "Not Admitted"])
 
     # compute cost and gradient
     m, n = X.shape
@@ -135,7 +132,10 @@ def main():
     print(f"theta: {theta}")
     print(f"Expected theta (approx): [ -25.161 0.206 0.201 ]")
 
-    plot_decision_boundary(theta, X, y)
+    ax = plot_decision_boundary(theta, X, y)
+    ax.set_xlabel('Exam 1 score')
+    ax.set_ylabel('Exam 2 score')
+    ax.legend(labels=["Admitted", "Not Admitted", "Decision Boundary"])
 
     # predict and accuracies
     prob = sigmoid(np.array([1, 45, 85]).dot(theta))
