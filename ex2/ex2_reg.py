@@ -60,14 +60,17 @@ def cost_function_reg(theta, X, y, lambda_):
     return J, grad
 
 
-def plot_decision_boundary(theta, X, y):
+def plot_decision_boundary(theta, X, y, axes=None):
     """Plots the data points X and y into a new figure with
     the decision boundary defined by theta
     plot_decision_boundary(theta, X,y) plots the data points with + for the 
     positive examples and o for the negative examples. X is assumed to be 
     MxN, N>3 matrix, where the first column is all-ones
     """
-    ax = ex2.plot_data(X[:, (1, 2)], y)
+    if axes is None:
+        ax = ex2.plot_data(X[:, (1, 2)], y)
+    else:
+        ax = axes
 
     u = np.linspace(-1, 1.5, 50)
     v = np.linspace(-1, 1.5, 50)
@@ -155,6 +158,31 @@ def main():
 
     print(f"Train Accuracy: {np.mean(p == y) * 100}")
     print(f"Expected accuracy (with lambda = 1): 83.1")
+
+    # effects of varying lambda:
+    lambdas = [0.0, 0.5, 1.0, 10.0, 100.0]
+    ax = ex2.plot_data(X[:, (1, 2)], y)
+    ax.set_prop_cycle(plt.cycler('color', ['c', 'm', 'y', 'k']))
+
+    for lambda_ in lambdas:
+        initial_theta = np.zeros((X.shape[1], 1))
+
+        # closure wrappers for fmin_bgfs()
+        def cost(theta):
+            theta = theta.reshape((-1, 1))
+            J = calc_J(theta, X, y, lambda_)
+            logger.debug(f"J: {J}")
+            return J
+        def gradient(theta):
+            theta = theta.reshape((-1, 1))
+            #grad = np.ndarray.flatten(calc_grad(theta, X, y))
+            grad = calc_grad(theta, X, y, lambda_).reshape((-1,))
+            logger.debug(f"grad: {grad}")
+            return grad  # must be (N,)
+
+        theta = fmin_bfgs(cost, initial_theta, fprime=gradient)
+        theta = theta.reshape((-1, 1))
+        plot_decision_boundary(theta, X, y, axes=ax)
 
     plt.show()
 
