@@ -60,7 +60,7 @@ def cost_function_reg(theta, X, y, lambda_):
     return J, grad
 
 
-def plot_decision_boundary(theta, X, y, axes=None):
+def plot_decision_boundary(theta, X, y, axes=None, colors=None):
     """Plots the data points X and y into a new figure with
     the decision boundary defined by theta
     plot_decision_boundary(theta, X,y) plots the data points with + for the 
@@ -83,7 +83,7 @@ def plot_decision_boundary(theta, X, y, axes=None):
                                   np.array(v[j]).reshape((1, 1))).dot(theta)
     z = z.T
 
-    ax.contour(u, v, z, levels=[0], linewidth=2)
+    ax.contour(u, v, z, levels=[0], linewidth=2, colors=colors)
     return ax
 
 
@@ -162,7 +162,17 @@ def main():
     # effects of varying lambda:
     lambdas = [0.0, 0.5, 1.0, 10.0, 100.0]
     ax = ex2.plot_data(X[:, (1, 2)], y)
-    ax.set_prop_cycle(plt.cycler('color', ['c', 'm', 'y', 'k']))
+    ax.legend(labels=['y = 1', 'y = 0'])
+
+    handles, labels = ax.get_legend_handles_labels()
+
+    # select a distinct colour for each contour plot
+    def col_cycler(cols):
+        count = 0
+        while True:
+            yield cols[count]
+            count = (count + 1) % len(cols)
+    col_iter = col_cycler(['r', 'y', 'g', 'b', 'c', 'm', 'k'])
 
     for lambda_ in lambdas:
         initial_theta = np.zeros((X.shape[1], 1))
@@ -182,7 +192,15 @@ def main():
 
         theta = fmin_bfgs(cost, initial_theta, fprime=gradient)
         theta = theta.reshape((-1, 1))
-        plot_decision_boundary(theta, X, y, axes=ax)
+        plot_decision_boundary(theta, X, y, axes=ax, colors=next(col_iter))
+
+    ax.set_title("")
+    ax.set_xlabel("Microchip Test 1")
+    ax.set_ylabel("Microchip Test 2")
+
+    proxy = [plt.Line2D((0, 0), (1, 1), color=pc.get_color()[0]) for pc in ax.collections]
+    labels = [f"lambda = {str(x)}" for x in lambdas]
+    ax.legend(proxy, labels)
 
     plt.show()
 
