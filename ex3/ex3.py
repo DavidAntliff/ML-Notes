@@ -90,6 +90,7 @@ def calc_J(theta, X, y, lambda_):
     J = sum(t) / m
     return J[0]
 
+
 def calc_grad(theta, X, y, lambda_):
     m = len(y)
     h = sigmoid(X.dot(theta))
