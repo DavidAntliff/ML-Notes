@@ -47,7 +47,7 @@ def main():
 
     ex3.display_data(sel)
 
-    # load precalculated weights
+    # load pre-calculated weights
     weights = scipy.io.loadmat('data/ex3weights.mat')
     Theta1 = weights['Theta1']
     Theta2 = weights['Theta2']

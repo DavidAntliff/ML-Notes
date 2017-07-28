@@ -26,8 +26,6 @@ def display_data(X, example_width=None):
         example_width = round(np.sqrt(X.shape[1]))
     example_width = int(example_width)
 
-    # TODO: colormap
-
     # compute rows, cols
     m, n = X.shape
     example_height = int(n / example_width)
