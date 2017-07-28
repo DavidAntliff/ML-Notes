@@ -211,8 +211,7 @@ def main():
     # randomly select 100 data points to display
     rand_indices = np.random.permutation(m)
     sel = X[rand_indices[:100], :]
-
-    #####TODO: display_data(sel)
+    display_data(sel)
 
     # load pre-calculated weights
     weights = scipy.io.loadmat('data/ex4weights.mat')
@@ -259,7 +258,7 @@ def main():
     print("(for lambda = 3, this value should be about 0.576051)")
 
     # Part 9: Training NN
-    lambda_ = 1
+    lambda_ = 0.25  # 1.0
 
     fmin = minimize(fun=nn_cost_function,
                     x0=initial_nn_params,
